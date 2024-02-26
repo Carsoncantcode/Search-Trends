@@ -1,27 +1,26 @@
 from pytrends.request import TrendReq
 import matplotlib.pyplot as plt
 
-def trending_searches(keywords):
+def trending_searches(keywords, timeframe):
     pytrends = TrendReq(hl='en-US', tz=480)
-
-    pytrends.build_payload(keywords, cat=0, timeframe='now 4-H', geo='US', gprop='')
-
+    pytrends.build_payload(keywords, cat=0, timeframe=timeframe, geo='US', gprop='')
     search_data = pytrends.interest_over_time()
-
     return search_data
 
 search_terms = ["Blockchain", "Bitcoin", "ETH", "Crypto", "Binance"]
+timeframes = ['now 4-H', 'now 1-H', 'today 3-m', 'all']
 
-data = trending_searches(search_terms)
+fig, axs = plt.subplots(2, 2, figsize=(20, 12))
 
-print(data)
+axs = axs.flatten()
 
-plt.figure(figsize=(20, 12))
-ax = plt.gca()
-data.plot(ax=ax, title='Google Trends')
-plt.xlabel('Date')
-plt.ylabel('Interest')
+for ax, timeframe in zip(axs, timeframes):
+    data = trending_searches(search_terms, timeframe)
+    data.plot(ax=ax, title=f'Trends: {timeframe}')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Interest')
+    ax.legend(search_terms)
 
-plt.savefig('google_trends_plot.png', dpi=300)
-
+plt.tight_layout()  
+plt.savefig('google_trends_plot_combined.png', dpi=300)
 plt.show()
