@@ -21,4 +21,7 @@ ax = plt.gca()
 data.plot(ax=ax, title='Google Trends')
 plt.xlabel('Date')
 plt.ylabel('Interest')
+
+plt.savefig('google_trends_plot.png', dpi=300)
+
 plt.show()
